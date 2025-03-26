@@ -1,8 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import jsonServer from 'json-server';
 import { products } from '../db.json';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,8 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     res.status(200).json(products);
-  } catch (error: any) {
-    console.error('Error handling request:', error);
-    res.status(500).json({ error: 'Failed to fetch products', details: error?.message || 'Unknown error' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch products' });
   }
 }
