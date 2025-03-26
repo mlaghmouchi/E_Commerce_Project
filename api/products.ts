@@ -1,30 +1,36 @@
-const jsonServer = require('json-server')
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+const jsonServer = require('json-server');
+const router = jsonServer.router('db.json');
+const middlewares = jsonServer.defaults();
 
-const server = jsonServer.create()
+module.exports = async (req: VercelRequest, res: VercelResponse) => {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-// Uncomment to allow write operations
-// const fs = require('fs')
-// const path = require('path')
-// const filePath = path.join('db.json')
-// const data = fs.readFileSync(filePath, "utf-8");
-// const db = JSON.parse(data);
-// const router = jsonServer.router(db)
+  // Handle OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-// Comment out to allow write operations
-const router = jsonServer.router('db.json')
+  try {
+    // Use json-server router to handle the request
+    const result = await new Promise((resolve, reject) => {
+      router.render(req, res, (err: Error | null, result: any) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
 
-const middlewares = jsonServer.defaults()
-
-server.use(middlewares)
-// Add this before server.use(router)
-server.use(jsonServer.rewriter({
-    '/api/*': '/$1',
-    '/blog/:resource/:id/show': '/:resource/:id'
-}))
-server.use(router)
-server.listen(3000, () => {
-    console.log('JSON Server is running')
-})
-
-// Export the Server API
-module.exports = server
+    res.status(200).json(result);
+  } catch (error: any) {
+    console.error('Error handling request:', error);
+    res.status(500).json({ error: 'Failed to fetch products', details: error?.message || 'Unknown error' });
+  }
+}; 
