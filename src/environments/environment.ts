@@ -1,4 +1,5 @@
+// Development environment
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000' // Default json-server URL
+  production: true,
+  apiUrl: 'https://e-commerce-project-ochre-seven.vercel.app/api' // Local development API URL
 }; 

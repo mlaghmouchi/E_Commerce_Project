@@ -1,4 +1,4 @@
-import { Address } from "./address.type";
+import { Address } from "./address.model";
 import { OrderItem } from "./orderItem.model";
 import { PaymentMethod } from "./paymentMethod.model";
 
