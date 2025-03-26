@@ -6,7 +6,7 @@ const middlewares = jsonServer.defaults();
 module.exports = async (req: VercelRequest, res: VercelResponse) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://e-commerce-project-g2uidl0sg-mohamed-amine-laghmouchis-projects.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader(
     'Access-Control-Allow-Headers',
