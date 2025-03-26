@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000' // You can change this to your production API URL when deploying
+  apiUrl: 'https://e-commerce-project-ochre-seven.vercel.app/api' // You can change this to your production API URL when deploying
 }; 
