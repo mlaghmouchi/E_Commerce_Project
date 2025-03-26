@@ -41,28 +41,31 @@ export class ProductService {
     this.isLoading.set(true);
     this.error.set(null);
     const url = this.apiService.getEndpointUrl(this.endpoint);
-    console.log('Fetching products from:', url); // Log the URL
+    console.log('Fetching products from:', url);
 
     return this.http
       .get<Product[]>(url)
       .pipe(
-        tap(response => {
-          console.log('API Response:', response); // Log the response
-          this.paginatedProducts.set(response);
-          this.totalItems.set(response.length);
-          this.totalPages.set(Math.ceil(response.length / limit));
+        tap({
+          next: (response) => {
+            console.log('API Response:', response);
+            if (Array.isArray(response)) {
+              this.paginatedProducts.set(response);
+              this.totalItems.set(response.length);
+              this.totalPages.set(Math.ceil(response.length / limit));
+            } else {
+              console.error('Invalid response format:', response);
+              this.error.set('Invalid response format');
+            }
+          },
+          error: (error) => {
+            console.error('Error in API call:', error);
+            this.error.set(error.message);
+          }
         }),
         finalize(() => this.isLoading.set(false))
       )
-      .subscribe({
-        next: (response) => {
-          console.log('Products fetched successfully:', response); // Log success
-        },
-        error: (error) => {
-          console.error('Error fetching products:', error); // Log error
-          this.error.set(error.message);
-        },
-      });
+      .subscribe();
   }
 
 }

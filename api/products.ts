@@ -24,8 +24,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: 'No products found' });
     }
     res.status(200).json(products);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products', details: error.message });
+    res.status(500).json({ error: 'Failed to fetch products', details: error?.message || 'Unknown error' });
   }
 }
