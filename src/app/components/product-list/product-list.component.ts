@@ -30,22 +30,29 @@ export class ProductListComponent implements OnInit {
   error = this.productService.error.asReadonly();
 
   constructor() {
-    // Create an effect to update filteredProducts whenever products change
     effect(() => {
-      this.filteredProducts.set(this.products());
+      const currentProducts = this.products();
+      console.log('Current products:', currentProducts); // Log products
+      this.filteredProducts.set(currentProducts);
     });
   }
 
   ngOnInit() {
+    console.log('Initializing ProductListComponent');
     this.productService.fetchProducts();
   }
 
   filterByCategory(category: string): void {
+    console.log('Filtering by category:', category); // Log category filter
     this.selectedCategory.set(category);
+    const currentProducts = this.products();
+    console.log('Current products before filter:', currentProducts); // Log products before filter
+    
     if (category === 'all') {
-      this.filteredProducts.set(this.products());
+      this.filteredProducts.set(currentProducts);
     } else {
-      const filtered = this.products().filter(product => product.category === category);
+      const filtered = currentProducts.filter(product => product.category === category);
+      console.log('Filtered products:', filtered); // Log filtered products
       this.filteredProducts.set(filtered);
     }
   }

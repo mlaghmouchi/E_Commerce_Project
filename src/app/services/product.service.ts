@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { finalize, Observable, tap } from 'rxjs';
 import { Product } from '../models/product.model';
 import { ApiService } from './api.service';
 
@@ -37,24 +37,29 @@ export class ProductService {
     return this.http.get<Product[]>(url);
   }
 
-  fetchProducts(page: number = 1, limit: number = 8) {
+  fetchProducts(page: number = 1, limit: number = 6) {
     this.isLoading.set(true);
     this.error.set(null);
     const url = this.apiService.getEndpointUrl(this.endpoint);
-    const params = new HttpParams()
-      .set('_page', page.toString())
-      .set('_per_page', limit.toString());
+    console.log('Fetching products from:', url); // Log the URL
 
     return this.http
-      .get<PaginatedResponse<Product>>(url, {params,})
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .get<Product[]>(url)
+      .pipe(
+        tap(response => {
+          console.log('API Response:', response); // Log the response
+          this.paginatedProducts.set(response);
+          this.totalItems.set(response.length);
+          this.totalPages.set(Math.ceil(response.length / limit));
+        }),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
         next: (response) => {
-          this.paginatedProducts.set(response.data);
-          this.totalPages.set(response.pages);
-          this.totalItems.set(response.items);
+          console.log('Products fetched successfully:', response); // Log success
         },
         error: (error) => {
+          console.error('Error fetching products:', error); // Log error
           this.error.set(error.message);
         },
       });
