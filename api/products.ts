@@ -1,64 +1,30 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { products } from '../db.json';
+const jsonServer = require('json-server')
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-export default function handler(req: VercelRequest, res: VercelResponse) {
-=======
-=======
->>>>>>> Stashed changes
-// Create json-server instance
-const server = jsonServer.create();
-const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults();
+const server = jsonServer.create()
 
-// Add middlewares
-server.use(middlewares);
+// Uncomment to allow write operations
+// const fs = require('fs')
+// const path = require('path')
+// const filePath = path.join('db.json')
+// const data = fs.readFileSync(filePath, "utf-8");
+// const db = JSON.parse(data);
+// const router = jsonServer.router(db)
 
-// Add rewrite rules
+// Comment out to allow write operations
+const router = jsonServer.router('db.json')
+
+const middlewares = jsonServer.defaults()
+
+server.use(middlewares)
+// Add this before server.use(router)
 server.use(jsonServer.rewriter({
-  '/api/*': '/$1',
-  '/blog/:resource/:id/show': '/:resource/:id'
-}));
+    '/api/*': '/$1',
+    '/blog/:resource/:id/show': '/:resource/:id'
+}))
+server.use(router)
+server.listen(3000, () => {
+    console.log('JSON Server is running')
+})
 
-// Add router
-server.use(router);
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
->>>>>>> Stashed changes
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  // Handle OPTIONS request
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
-  try {
-    console.log('Products data:', products); // Log the products data
-    if (!products || products.length === 0) {
-      console.error('No products found in db.json');
-      return res.status(404).json({ error: 'No products found' });
-    }
-    res.status(200).json(products);
-  } catch (error) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    res.status(500).json({ error: 'Failed to fetch products' });
-=======
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products', details: error.message });
->>>>>>> Stashed changes
-=======
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products', details: error.message });
->>>>>>> Stashed changes
-  }
-}
+// Export the Server API
+module.exports = server

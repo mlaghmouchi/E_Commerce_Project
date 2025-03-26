@@ -1,26 +1,14 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/e-commerce-project/browser"
+    "functions": {
+      "api/server.js": {
+        "memory": 1024,
+        "includeFiles": "db.json"
       }
     },
-    {
-      "src": "api/**/*.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
-} 
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "api/products.js"
+      }
+    ]
+}
