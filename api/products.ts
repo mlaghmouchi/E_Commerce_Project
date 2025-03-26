@@ -2,8 +2,11 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { products } from '../db.json';
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 export default function handler(req: VercelRequest, res: VercelResponse) {
 =======
+=======
+>>>>>>> Stashed changes
 // Create json-server instance
 const server = jsonServer.create();
 const router = jsonServer.router('db.json');
@@ -47,7 +50,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.status(200).json(products);
   } catch (error) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     res.status(500).json({ error: 'Failed to fetch products' });
+=======
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Failed to fetch products', details: error.message });
+>>>>>>> Stashed changes
 =======
     console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Failed to fetch products', details: error.message });
