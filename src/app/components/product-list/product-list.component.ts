@@ -38,8 +38,8 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Initializing ProductListComponent');
-    this.productService.fetchProducts();
+    // console.log('Initializing ProductListComponent');
+    // this.productService.fetchProducts();
   }
 
   filterByCategory(category: string): void {
