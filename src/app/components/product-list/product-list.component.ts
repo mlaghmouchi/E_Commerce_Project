@@ -31,8 +31,8 @@ export class ProductListComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      const currentProducts = this.products();
-      console.log('Current products:', currentProducts); // Log products
+      const currentProducts = this.products() || [];
+      console.log('Current products:', currentProducts);
       this.filteredProducts.set(currentProducts);
     });
   }
@@ -43,16 +43,16 @@ export class ProductListComponent implements OnInit {
   }
 
   filterByCategory(category: string): void {
-    console.log('Filtering by category:', category); // Log category filter
+    console.log('Filtering by category:', category);
     this.selectedCategory.set(category);
-    const currentProducts = this.products();
-    console.log('Current products before filter:', currentProducts); // Log products before filter
+    const currentProducts = this.products() || [];
+    console.log('Current products before filter:', currentProducts);
     
     if (category === 'all') {
       this.filteredProducts.set(currentProducts);
     } else {
       const filtered = currentProducts.filter(product => product.category === category);
-      console.log('Filtered products:', filtered); // Log filtered products
+      console.log('Filtered products:', filtered);
       this.filteredProducts.set(filtered);
     }
   }
