@@ -11,7 +11,6 @@ import { FooterComponent } from './components/footer/footer.component';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
     NavbarComponent,
     HomeComponent,
     ProductListComponent,

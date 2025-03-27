@@ -28,7 +28,6 @@ export class ProductListComponent implements OnInit {
   products = this.productService.paginatedProducts.asReadonly();
   isLoading = this.productService.isLoading.asReadonly();
   error = this.productService.error.asReadonly();
-  totalPages = this.productService.totalPages.asReadonly();
 
   constructor() {
     effect(() => {
