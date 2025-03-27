@@ -28,6 +28,7 @@ export class ProductListComponent implements OnInit {
   products = this.productService.paginatedProducts.asReadonly();
   isLoading = this.productService.isLoading.asReadonly();
   error = this.productService.error.asReadonly();
+  totalPages = this.productService.totalPages.asReadonly();
 
   constructor() {
     effect(() => {
@@ -38,8 +39,8 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('Initializing ProductListComponent');
-    // this.productService.fetchProducts();
+    console.log('Initializing ProductListComponent');
+    this.productService.fetchProducts();
   }
 
   filterByCategory(category: string): void {
